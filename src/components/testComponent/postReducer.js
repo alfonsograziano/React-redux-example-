@@ -1,5 +1,4 @@
 import axios from "axios"
-import { generateId } from "./postService"
 //_PENDING _FULFILLED _REJECTED
 
 /*
@@ -10,15 +9,28 @@ error: ""
 
 */
 
-const FETCH_POSTS = "FETCH_POSTS"
 const FETCH_POSTS_PENDING = "FETCH_POSTS_PENDING"
 const FETCH_POSTS_FULFILLED = "FETCH_POSTS_FULFILLED"
 const FETCH_POSTS_REJECTED = "FETCH_POSTS_REJECTED"
 export const fetchPosts = () => {
-    return {
-        type: FETCH_POSTS,
-        payload: axios.get("/posts")
+    return (dispatch, getState) =>{
+
+        dispatch({type:FETCH_POSTS_PENDING})
+
+        axios.get("/posts?_page="+getState().post.currentPage+"&_limit="+getState().post.limit)
+        .then(res=>{
+            console.log(res.data)
+            dispatch({type:FETCH_POSTS_FULFILLED, payload:res})
+        })
+        .catch(err=>{
+            dispatch({type:FETCH_POSTS_REJECTED, payload:err})
+
+        })
     }
+        /*
+        type: FETCH_POSTS,
+        payload: axios.get("/posts?_page="+store.getState().posts.currentPage+"&_limit="+store.getState().posts.limit)
+        */
 }
 
 
@@ -36,20 +48,14 @@ export const deletePostAndFetch = (id) => {
         })
         axios.delete("/posts/"+id)
         .then(res=>{
-            dispatch(()=>{
-                return {
-                    type: DELETE_POST_AND_FETCH_FULLFILLED
-                }
-            })
+            dispatch({type: DELETE_POST_AND_FETCH_FULLFILLED })
             dispatch(fetchPosts())
         })
         .catch(err=>{
-            dispatch(()=>{
-                return {
+            dispatch( {
                     type: DELETE_POST_AND_FETCH_REJECTED,
                     payload: err
-                }
-            })
+                })
         })
     }
 }
@@ -61,27 +67,17 @@ const UPDATE_POST_AND_FETCH_REJECTED = "UPDATE_POST_AND_FETCH_REJECTED"
 export const updatePostAndFetch = (post) => {
 
     return (dispatch) =>{
-        dispatch(()=>{
-            return {
-                type: UPDATE_POST_AND_FETCH_PENDING
-            }
-        })
+        dispatch({ type: UPDATE_POST_AND_FETCH_PENDING})
         axios.put("/posts/"+post.id,post)
         .then(res=>{
-            dispatch(()=>{
-                return {
-                    type: UPDATE_POST_AND_FETCH_FULLFILLED
-                }
-            })
+            dispatch({type: UPDATE_POST_AND_FETCH_FULLFILLED})
             dispatch(fetchPosts())
         })
         .catch(err=>{
-            dispatch(()=>{
-                return {
+            dispatch({
                     type: UPDATE_POST_AND_FETCH_REJECTED,
                     payload: err
-                }
-            })
+                })
         })
     }
 }
@@ -95,33 +91,41 @@ export const uploadPostAndFetch = (post) => {
     post.author = "aminId" //TODO: Impostare l'autore con autenticazione etc
 
     return (dispatch) =>{
-        dispatch(()=>{
-            return {
-                type: UPLOAD_POST_AND_FETCH_PENDING
-            }
-        })
+        dispatch({type: UPLOAD_POST_AND_FETCH_PENDING})
         axios.post("/posts",post)
         .then(res=>{
-            dispatch(()=>{
-                return {
-                    type: UPLOAD_POST_AND_FETCH_FULLFILLED
-                }
-            })
+            dispatch({type: UPLOAD_POST_AND_FETCH_FULLFILLED })
             dispatch(fetchPosts())
         })
         .catch(err=>{
-            dispatch(()=>{
-                return {
+            dispatch( {
                     type: UPLOAD_POST_AND_FETCH_REJECTED,
                     payload: err
-                }
-            })
+                })
         })
     }
 }
 
 
-const initialState = { 
+const NEXT_PAGE = "NEXT_PAGE"
+export const nextPage = () =>{
+    return (dispatch) =>{
+        dispatch({type: NEXT_PAGE})
+        dispatch(fetchPosts())
+    }
+}
+
+const PREV_PAGE = "PREV_PAGE"
+export const prevPage = () =>{
+    return (dispatch) =>{
+        dispatch({type: PREV_PAGE})
+        dispatch(fetchPosts())
+    }
+}
+
+const initialState = {
+    currentPage: 1,
+    limit: 2, 
     fetched: false, 
     fetching: false, 
     error: "", 
@@ -176,6 +180,15 @@ export const postReducer = (state = initialState, action) => {
             return {...state, delete:{ error: "", deleted:true, deleting:false, id:""}}       
         case UPDATE_POST_AND_FETCH_REJECTED:
             return {...state, newPost:{ error: action.payload.message, deleted:false, deleting:false}}
+
+
+        case NEXT_PAGE:
+            return {...state, currentPage: state.currentPage+1}
+        case PREV_PAGE:
+            if(state.currentPage > 1)
+                return {...state, currentPage: state.currentPage-1}
+            else
+                return state
     }
     return state
 }

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux"
-import { fetchPosts, deletePostAndFetch, updatePostAndFetch, uploadPostAndFetch } from "./postReducer";
-import { setToken } from "../redux-store/authReducer";
+import { fetchPosts, deletePostAndFetch, updatePostAndFetch, uploadPostAndFetch, prevPage, nextPage } from "./postReducer";
 import { logout } from "../redux-store/authReducer";
 import PostItem from "./PostItem";
 import Button from "@material-ui/core/Button"
@@ -19,7 +18,6 @@ function Post(props) {
     const [open, setOpen] = useState(false)
 
     useEffect(() => {
-        dispatch(setToken("Tokeeennn"))
         dispatch(fetchPosts())
     }, [])
 
@@ -65,11 +63,6 @@ function Post(props) {
         dispatch(deletePostAndFetch(id))
     }
 
-    const login = () => {
-        dispatch(setToken("AUTH-user123"))
-    }
-
-
     const esciDaStoCazzoDiAccount = () => {
         dispatch(logout())
     }
@@ -77,19 +70,6 @@ function Post(props) {
 
     return (
         <div style={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
-            <h1>{state.auth.appName}</h1>
-            {(state.auth.token) ?
-                <div>
-                    <h2>Utente loggato</h2>
-                    <button onClick={esciDaStoCazzoDiAccount}>Logout</button>
-                </div>
-                :
-                <div>
-                    <h2>Utente non loggato</h2>
-                    <button onClick={login}>Login</button>
-                </div>
-            }
-
 
             <div style={{ maxWidth: 700 }}>
                 <List>
@@ -97,9 +77,24 @@ function Post(props) {
                 </List>
 
             </div>
+            <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", width:"500", alignItems:"center"}}>
+                <Button style={{margin:20}}
+                onClick={()=>dispatch(prevPage())}>
+                    Prev Page
+                </Button>
+                {state.post.currentPage}
+                <Button  style={{margin:20}}
+                onClick={()=>dispatch(nextPage())}>
+                    Next Page
+                </Button>
+            </div>
             <Button color="primary" variant="contained" style={{ margin: 20 }}
                 onClick={()=>setOpen(true)}
             >Aggiungi post</Button>
+
+            <Button onClick={esciDaStoCazzoDiAccount}>
+                LogOut (lo so che è brutto messo qua ma vabbè)
+            </Button>
 
             <AddNewPost 
                 openDialog={open}

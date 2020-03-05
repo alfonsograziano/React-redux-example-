@@ -1,12 +1,10 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import Post from "./components/testComponent/Post"
+import Home from './components/homePage/Home';
 
 function App() {
   return (
     <div className="App">
-      <Post/>
+      <Home/>
     </div>
   );
 }
