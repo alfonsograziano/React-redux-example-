@@ -1,0 +1,42 @@
+{
+  "users": [
+    {
+      "username": "admin@admin.com",
+      "password": "password",
+      "role": "admin",
+      "id": "adminId"
+    }
+  ],
+  "posts": [
+    {
+      "title": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "body": "Mauris eget lectus ac metus tempus tristique.\nNullam quis orci vehicula, lacinia lorem tempor, porta magna.\nDuis quis neque posuere, euismod sapien non, fringilla nisi.\nDonec lobortis mi nec erat venenatis volutpat.",
+      "author": "aminId",
+      "id": 1
+    },
+    {
+      "title": "Fusce eget sem vel risus feugiat convallis.",
+      "body": "Quisque at nibh maximus, ultricies mauris quis, dictum risus.\nNulla placerat erat et erat euismod congue.",
+      "author": "aminId",
+      "id": 2
+    },
+    {
+      "title": "Donec feugiat sem eu mi dapibus efficitur.",
+      "body": "eget lectus ac metus tempus tristique.\nNullam quis orci vehicula, lacinia lorem tempor, porta magna.\nDuis quis neque posuere, euismod sapien non, fringilla nisi.\nDonec lobortis mi nec erat venenatis volutpat.\nFusce eget sem vel risus feugiat convallis.",
+      "author": "aminId",
+      "id": 3
+    },
+    {
+      "title": "Donec feugiat sem eu mi dapibus efficitur.",
+      "body": "Quisque at nibh maximus, ultricies mauris quis, dictum risus.\nNulla placerat erat et erat euismod congue.",
+      "author": "aminId",
+      "id": 4
+    },
+    {
+      "title": "Fusce eget sem vel risus feugiat convallis.",
+      "body": "\nLorem ipsum dolor sit amet, consectetur adipiscing elit.\nMauris eget lectus ac metus tempus tristique.\nNullam quis orci vehicula, lacinia lorem tempor, porta magna.\nDuis quis neque posuere, euismod sapien non, fringilla nisi.\nDonec lobortis mi nec erat venenatis volutpat.\nFusce eget sem vel risus feugiat convallis.\nQuisque at nibh maximus, ultricies mauris quis, dictum risus.\nNulla placerat erat et erat euismod congue.\nDonec feugiat sem eu mi dapibus efficitur.\nSed pellentesque nisi sit amet nisi tempor scelerisque.",
+      "author": "aminId",
+      "id": 5
+    }
+  ]
+}
